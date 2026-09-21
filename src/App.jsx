@@ -43,7 +43,9 @@ export default function App() {
       preferred_operation: formData.preferred_operation,
     };
 
-    const BACKEND_URL = "http://127.0.0.1:8000";
+    // Yahan URL update kiya gaya hai
+    // Replace the URL inside quotes below with your ACTUAL Render backend URL
+    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "https://agrinova-backend-xxxx.onrender.com"; // <--- Bipin: yahan "xxxx" hata kar apna Render wala backend URL daalna hai bina slash (/) ke!
 
     try {
       const res = await fetch(`${BACKEND_URL}/api/assess-site`, {
@@ -55,7 +57,7 @@ export default function App() {
       const data = await res.json();
       setResponse(data);
     } catch (error) {
-      setResponse({ error: "Backend connection failed. Is FastAPI running?" });
+      setResponse({ error: "Backend connection failed. Is FastAPI running and CORS configured?" });
     } finally {
       setLoading(false);
     }
