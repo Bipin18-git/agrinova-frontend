@@ -73,6 +73,7 @@ export default function App() {
       preferred_operation: formData.preferred_operation,
     };
 
+    // Render Live Backend URL (No Localhost in Production)
     const BACKEND_URL = "https://agrinova-saas-2.onrender.com";
 
     try {
