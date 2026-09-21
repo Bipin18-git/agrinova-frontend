@@ -45,7 +45,7 @@ export default function App() {
 
     // Yahan URL update kiya gaya hai
     // Replace the URL inside quotes below with your ACTUAL Render backend URL
-    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "https://agrinova-backend-xxxx.onrender.com"; // <--- Bipin: yahan "xxxx" hata kar apna Render wala backend URL daalna hai bina slash (/) ke!
+    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "https://agrinova-saas-2.onrender.com"; // <--- Bipin: yahan "xxxx" hata kar apna Render wala backend URL daalna hai bina slash (/) ke!
 
     try {
       const res = await fetch(`${BACKEND_URL}/api/assess-site`, {
