@@ -7,6 +7,7 @@ export default function App() {
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
+    initial_objective: "1. Agri allied processing infra use (Max 80% of connected load)",
     latitude: 26.4435,
     longitude: 91.4398,
     land_area_acres: 5.02,
@@ -37,6 +38,7 @@ export default function App() {
         headers.forEach((h, index) => {
           if (values[index] !== undefined && values[index] !== "") {
             const val = values[index];
+            if (h.includes("objective")) newData.initial_objective = val;
             if (h.includes("lat")) newData.latitude = Number(val);
             if (h.includes("lon")) newData.longitude = Number(val);
             if (h.includes("area") || h.includes("land")) newData.land_area_acres = Number(val);
@@ -60,6 +62,7 @@ export default function App() {
 
     const payload = {
       project_id: "AV-ASSAM-0001",
+      initial_objective: formData.initial_objective,
       location: { latitude: Number(formData.latitude), longitude: Number(formData.longitude) },
       land_area_acres: Number(formData.land_area_acres),
       current_crop: formData.current_crop,
@@ -70,6 +73,7 @@ export default function App() {
       preferred_operation: formData.preferred_operation,
     };
 
+    // LOCAL URL SET KIYA HAI YAHAN
     const BACKEND_URL = "http://127.0.0.1:8000";
 
     try {
@@ -83,7 +87,7 @@ export default function App() {
       const data = await res.json();
       setResponse(data);
     } catch (error) {
-      setResponse({ error: "Backend connection failed. Is FastAPI running?" });
+      setResponse({ error: "Backend connection failed. Is FastAPI running on local?" });
     } finally {
       setLoading(false);
     }
@@ -127,8 +131,10 @@ export default function App() {
         doc.rect(20, y, 170, 8, "F");
       }
       doc.text(key.replace(/_/g, ' ').toUpperCase(), 25, y + 6);
-      doc.text(String(val), 115, y + 6);
-      y += 8;
+      
+      const textLines = doc.splitTextToSize(String(val), 80);
+      doc.text(textLines, 115, y + 6);
+      y += 8 + ((textLines.length - 1) * 5); 
     });
 
     doc.setDrawColor(229, 231, 235);
@@ -184,6 +190,18 @@ export default function App() {
 
         <form onSubmit={handleSubmit}>
           <div className="form-grid">
+            
+            {/* COMPULSORY INITIAL OBJECTIVE SELECTOR */}
+            <div className="input-group full-width" style={{ marginBottom: '10px' }}>
+              <label style={{ fontWeight: '700', fontSize: '13px', color: '#374151' }}>Project Initial Objective *</label>
+              <select name="initial_objective" className="saas-input" value={formData.initial_objective} onChange={handleChange} required style={{ border: '2px solid #059669', backgroundColor: '#f0fdf4', color: '#064e3b', fontWeight: '600' }}>
+                <option value="1. Agri allied processing infra use (Max 80% of connected load)">1. Agri allied processing infra use (Max 80% of connected load)</option>
+                <option value="2. Agriculture (<10kw)">2. Agriculture (&lt;10kw)</option>
+                <option value="3. Dual income through Energy + agri (>500 kw)">3. Dual income through Energy + agri (&gt;500 kw)</option>
+                <option value="4. Standalone BESS">4. Standalone BESS</option>
+              </select>
+            </div>
+
             <div className="input-group">
               <label style={{ fontWeight: '600', fontSize: '13px', color: '#374151' }}>Latitude (GPS)</label>
               <input type="number" step="any" name="latitude" className="saas-input" value={formData.latitude} onChange={handleChange} required />
