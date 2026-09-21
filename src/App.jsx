@@ -73,8 +73,7 @@ export default function App() {
       preferred_operation: formData.preferred_operation,
     };
 
-    // LOCAL URL SET KIYA HAI YAHAN
-    const BACKEND_URL = "http://127.0.0.1:8000";
+    const BACKEND_URL = "https://agrinova-saas-2.onrender.com";
 
     try {
       const res = await fetch(`${BACKEND_URL}/api/assess-site`, {
@@ -87,7 +86,7 @@ export default function App() {
       const data = await res.json();
       setResponse(data);
     } catch (error) {
-      setResponse({ error: "Backend connection failed. Is FastAPI running on local?" });
+      setResponse({ error: "Backend connection failed. Check Render server status." });
     } finally {
       setLoading(false);
     }
